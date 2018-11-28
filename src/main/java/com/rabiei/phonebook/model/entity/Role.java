@@ -19,6 +19,10 @@ public class Role {
     @ManyToMany(mappedBy = "privilegs", cascade = CascadeType.ALL)
     Set<Privilege> privileges = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "roles")
+    Set<User> users = new HashSet<>();
+
     public Integer getId() {
         return id;
     }
@@ -41,5 +45,13 @@ public class Role {
 
     public void setPrivileges(Set<Privilege> privileges) {
         this.privileges = privileges;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }
