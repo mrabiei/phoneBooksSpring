@@ -1,15 +1,25 @@
 package com.rabiei.phonebook.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 @Entity
+
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
+
+
+    @JsonIgnore
+    @ToString.Exclude
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,58 +36,26 @@ public class User {
     @NotEmpty(message = "plz type your full name")
     private String fullName;
 
-    @OneToMany(mappedBy = "users")
-    Set<Contact> contacts = new HashSet<>();
+
+
+    @OneToMany( mappedBy = "users")
+     private Set<Contact> contacts ;
 
 
     @ManyToOne()
-    private Role roles;
+    @JoinColumn(name = "roleId", nullable = false)
+    private Role role;
 
-    public int getId() {
-        return id;
+
+    public User() {
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
+    public User(@NotEmpty(message = "the user could not be empty") String user, @NotEmpty(message = "plz input the password") @Length(message = "plz input the password at least 8 char length") String pass, @NotEmpty(message = "plz type your full name") String fullName, Set<Contact> contacts, Role role) {
         this.user = user;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
         this.pass = pass;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public Role getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Role roles) {
-        this.roles = roles;
-    }
-
-    public Set<Contact> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(Set<Contact> contacts) {
         this.contacts = contacts;
+        this.role = role;
     }
 }

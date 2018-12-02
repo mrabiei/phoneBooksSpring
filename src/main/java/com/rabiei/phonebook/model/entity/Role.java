@@ -1,57 +1,49 @@
 package com.rabiei.phonebook.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "roles")
 public class Role {
+
+
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rolesId")
     private Integer id;
 
+
     @NotEmpty
     private String name;
 
-    @ManyToMany(mappedBy = "privilegs", cascade = CascadeType.ALL)
-    Set<Privilege> privileges = new HashSet<>();
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
+    private Set<Privilege> privileges;
 
+    @OneToMany(mappedBy = "role")
+    private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "roles")
-    Set<User> users = new HashSet<>();
+    @JsonIgnore
 
-    public Integer getId() {
-        return id;
+    public Role() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Role(@NotEmpty String name, Set<Privilege> privileges, Set<User> users) {
         this.name = name;
-    }
-
-    public Set<Privilege> getPrivileges() {
-        return privileges;
-    }
-
-    public void setPrivileges(Set<Privilege> privileges) {
         this.privileges = privileges;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
         this.users = users;
     }
 }

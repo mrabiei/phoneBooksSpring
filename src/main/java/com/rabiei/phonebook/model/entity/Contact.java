@@ -1,22 +1,31 @@
 package com.rabiei.phonebook.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
+@Data
 @Entity
+
 @Table(name = "contacts")
 public class Contact {
+
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ContatctId")
     private Integer id;
-
-
+    @EqualsAndHashCode.Exclude
     @NotEmpty
     @Length(min = 2, message = "plz input the name more than 2 char ")
     private String firstname;
@@ -30,62 +39,19 @@ public class Contact {
     private String address;
 
     @ManyToOne()
+    @JoinColumn(name = "userId", nullable = false)//its the same as foreign key
     private User users;
 
-    public Integer getId() {
-        return id;
+
+    public Contact() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
+    public Contact(@NotEmpty @Length(min = 2, message = "plz input the name more than 2 char ") String firstname, String lastname, @NotEmpty String tel, @Email String email, String address, User users) {
         this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
         this.tel = tel;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(User users) {
         this.users = users;
     }
-
 }

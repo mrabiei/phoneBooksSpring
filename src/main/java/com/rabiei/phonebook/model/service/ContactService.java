@@ -13,8 +13,13 @@ public class ContactService {
     @Autowired
     private ContactRepository contactRepository;
 
-    public List<Contact> findall(){
+    public List<Contact> findall() {
         return contactRepository.findAll();
     }
 
+
+    public long findOne(){
+        return contactRepository.count();
+
+    }
 }
