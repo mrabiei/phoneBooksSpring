@@ -5,21 +5,14 @@ import com.rabiei.phonebook.model.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class ContactService {
+public class ContactService extends BaseService<Contact> {
 
     @Autowired
     private ContactRepository contactRepository;
 
-    public List<Contact> findall() {
-        return contactRepository.findAll();
-    }
-
-
-    public long findOne(){
-        return contactRepository.count();
-
+    @Override
+    protected ContactRepository getRepository() {
+        return contactRepository;
     }
 }

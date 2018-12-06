@@ -7,25 +7,18 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Data
 @Entity
-
 @Table(name = "contacts")
 public class Contact {
-
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ContatctId")
+    @Column(name = "contatct_id")
     private Integer id;
-    @EqualsAndHashCode.Exclude
+
     @NotEmpty
     @Length(min = 2, message = "plz input the name more than 2 char ")
     private String firstname;
@@ -39,8 +32,11 @@ public class Contact {
     private String address;
 
     @ManyToOne()
-    @JoinColumn(name = "userId", nullable = false)//its the same as foreign key
-    private User users;
+    @JoinColumn(name = "users_id", nullable = false)//its the same as foreign key
+
+    @JsonIgnore
+    @ToString.Exclude
+    private User users ;
 
 
     public Contact() {

@@ -1,6 +1,7 @@
 package com.rabiei.phonebook.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,10 +21,11 @@ public class Privilege {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
 
+    @JsonIgnoreProperties
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "privilegsId")
+    @Column(name = "privilegs_Id")
     private Integer id;
 
 
@@ -31,7 +33,11 @@ public class Privilege {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Role> roles =new HashSet<>();
+
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Role> roles = new HashSet<>();
 
     public Privilege() {
     }

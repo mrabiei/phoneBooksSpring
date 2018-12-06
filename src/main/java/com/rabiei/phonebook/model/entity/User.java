@@ -1,13 +1,16 @@
 package com.rabiei.phonebook.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,47 +18,45 @@ import java.util.Set;
 @Entity
 
 @Table(name = "users")
-public class User implements Serializable {
+public class User {
 
-
-    @JsonIgnore
-    @ToString.Exclude
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usersId")
+    @Column(name = "users_id")
     private int id;
 
     @NotEmpty(message = "the user could not be empty")
-    private String user;
+    private String username;
 
     @NotEmpty(message = "plz input the password")
     @Length(message = "plz input the password at least 8 char length")
-    private String pass;
+    private String password;
 
     @NotEmpty(message = "plz type your full name")
     private String fullName;
 
-
-
-    @OneToMany( mappedBy = "users")
-     private Set<Contact> contacts ;
+    @OneToMany(mappedBy = "users",cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Contact> contacts = new HashSet<>();
 
 
     @ManyToOne()
-    @JoinColumn(name = "roleId", nullable = false)
-    private Role role;
+    @JoinColumn(name = "role_id", nullable = false)
 
+    @JsonIgnore
+    @ToString.Exclude
+    private Role role;
 
     public User() {
     }
 
-
-    public User(@NotEmpty(message = "the user could not be empty") String user, @NotEmpty(message = "plz input the password") @Length(message = "plz input the password at least 8 char length") String pass, @NotEmpty(message = "plz type your full name") String fullName, Set<Contact> contacts, Role role) {
-        this.user = user;
-        this.pass = pass;
+    public User(@NotEmpty(message = "the user could not be empty") String username, @NotEmpty(message = "plz input the password") @Length(message = "plz input the password at least 8 char length") String password, @NotEmpty(message = "plz type your full name") String fullName, Role role) {
+        this.username = username;
+        this.password = password;
         this.fullName = fullName;
-        this.contacts = contacts;
         this.role = role;
     }
 }
